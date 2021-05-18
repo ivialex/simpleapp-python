@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simpleapp-python
+  namespace: prova
+spec:
+  selector:
+    matchLabels:
+      app: simpleapp-python
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: simpleapp-python
+    spec:
+      containers:
+      - name: simpleapp-python
+        image: ivisilva/simpleapp-python:v1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        envFrom:
+        - configMapRef:
+            name: simpleapp-python-configmap
+        livenessProbe:
+          httpGet:
+           path: /health
+           port: 80
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          periodSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+           path: /health
+           port: 80
+          initialDelaySeconds: 5
+          timeoutSeconds: 2
+          periodSeconds: 10
+          failureThreshold: 3
