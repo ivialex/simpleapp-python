@@ -1,4 +1,7 @@
 #!/bin/sh
+set -o verbose
+set -o errexit
+set -o pipefail
 
 CMD=${1:-install}
 PREFIX=${2:-$HOME/local/bin}
